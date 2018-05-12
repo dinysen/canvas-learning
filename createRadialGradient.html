@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>radial gradient</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+    <canvas id="canvas_1" ></canvas>
+  </body>
+  <script>
+  	var canvas_1 = document.getElementById("canvas_1");
+  	var context_1 = canvas_1.getContext("2d");
+  	//笔触颜色
+  	var radialGradient = context_1.createRadialGradient(75,50,5,90,60,100);
+  	radialGradient.addColorStop(0,"red");
+  	radialGradient.addColorStop(1,"white");
+  	context_1.fillStyle = radialGradient;
+	context_1.fillRect(0,0,150,100);
+	
+  </script>
+</html>

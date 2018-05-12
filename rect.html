@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>rect</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	
+  </head>
+  
+  <body>
+    <canvas id="canvas_1" ></canvas>
+    <canvas id="canvas_2" ></canvas>
+    <canvas id="canvas_3" ></canvas>
+    <canvas id="canvas_4" ></canvas>
+    
+  </body>
+  <script>
+  	var canvas_1 = document.getElementById("canvas_1");
+  	var context_1 = canvas_1.getContext("2d");
+  	// 红色矩形
+	context_1.beginPath();
+	context_1.lineWidth="6";
+	context_1.strokeStyle="red";
+	context_1.rect(5,5,290,140);//x y width height
+	context_1.stroke();
+	
+	// 绿色矩形
+	context_1.beginPath();
+	context_1.lineWidth="4";
+	context_1.strokeStyle="green";
+	context_1.rect(30,30,50,50);
+	context_1.stroke();
+	
+	// 绿色矩形
+	context_1.beginPath();
+	context_1.lineWidth="4";
+	context_1.strokeStyle="green";
+	context_1.fillRect(20,20,20,20);
+	context_1.stroke();
+	
+	context_1.clearRect(20,20,5,5);
+	
+	//笔触颜色
+	context_1.strokeRect(50,50,150,80);
+  	
+  </script>
+</html>

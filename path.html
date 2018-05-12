@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>path</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	
+  </head>
+  
+  <body>
+    <canvas id="canvas_1" ></canvas>
+    <canvas id="canvas_2" ></canvas>
+    <canvas id="canvas_3" ></canvas>
+    <canvas id="canvas_4" ></canvas>
+    <canvas id="canvas_5" ></canvas>
+    <canvas id="canvas_6" ></canvas>
+    <canvas id="canvas_7" ></canvas>
+    
+  </body>
+  <script>
+  	var canvas_1 = document.getElementById("canvas_1");
+  	var context_1 = canvas_1.getContext("2d");
+  	context_1.rect(20,20,100,100);
+  	context_1.fillStyle = "green";
+  	context_1.fill();
+  	
+  	context_1.beginPath();//重置一条路线 使用moveTo()、lineTo()、quadricCurveTo()、bezierCurveTo()、arcTo() 以及 arc()来划线
+	context_1.moveTo(25,25);//移动起始点 不划线
+	context_1.lineTo(20,100);//创建起始点 到 这个坐标的一条线
+	context_1.lineTo(70,100);
+	context_1.strokeStyle="blue";
+	context_1.closePath();//创建从结束点到开始点的路径
+	context_1.stroke();
+	
+	var canvas_2 = document.getElementById("canvas_2");
+	var context_2 = canvas_2.getContext("2d");
+	// 剪切矩形区域
+	context_2.rect(50,20,200,120);
+	context_2.stroke();
+	context_2.clip();
+	// 在 clip() 之后绘制绿色矩形 clip之后只操作裁剪之后的
+	context_2.fillStyle="green";
+	context_2.fillRect(0,0,150,100);
+	
+	var canvas_3 = document.getElementById("canvas_3");
+	var context_3 = canvas_3.getContext("2d");
+	context_3.beginPath();
+	context_3.moveTo(20,20);
+	context_3.quadraticCurveTo(20,100,200,20);//二次贝塞尔曲线
+	context_3.stroke();
+	
+	var canvas_4 = document.getElementById("canvas_4");
+	var context_4 = canvas_4.getContext("2d");
+	context_4.beginPath();
+	context_4.moveTo(20,20);
+	context_4.bezierCurveTo(20,100,200,100,200,20);
+	context_4.stroke();
+	
+	var canvas_5 = document.getElementById("canvas_5");
+	var context_5 = canvas_5.getContext("2d");
+	context_5.beginPath();
+	context_5.arc(100,75,50,0,2*Math.PI);//圆形的x坐标 圆形的y坐标 起始角 结束角
+	context_5.stroke();
+	
+	var canvas_6 = document.getElementById("canvas_6");
+	var context_6 = canvas_6.getContext("2d");
+	context_6.beginPath();
+	context_6.moveTo(20,20);           // 创建开始点
+	context_6.lineTo(100,20);          // 创建水平线
+	context_6.arcTo(150,20,150,70,50); // 创建弧 起点x坐标 起点y坐标 终点x坐标 终点y坐标 转角半径
+	context_6.lineTo(150,120);         // 创建垂直线
+	context_6.stroke();                // 进行绘制
+  	
+  	var canvas_7 = document.getElementById("canvas_6");
+	var context_7 = canvas_6.getContext("2d");
+	context_7.rect(20,20,150,100);
+	if(context_7.isPointInPath(20,50)){//起点x坐标 起点y坐标 只要在context范围中都算true
+		alert("in path");
+	}  	
+  </script>
+</html>
