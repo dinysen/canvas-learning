@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>drawImage</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	
+  </head>
+  
+  <body>
+    <canvas width="350px" height="350px" id="canvas_1" ></canvas>
+    <canvas width="350px" height="350px" id="canvas_2" ></canvas><button onclick="copy()">copy</button>
+    <canvas width="350px" height="350px" id="canvas_3" ></canvas>
+    <canvas width="350px" height="350px" id="canvas_4" ></canvas>
+  </body>
+  <script>
+	var canvas_1 = document.getElementById("canvas_1");
+	var context_1 = canvas_1.getContext("2d");
+	var imgData = context_1.createImageData(100,100);
+	for (var i=0;i<imgData.data.length;i+=4){
+		//每一个像素包含四方面信息 R G B A，就是如果要做滤镜效果，那么就应该操作这四方面的数值
+		imgData.data[i+0]=255;
+		imgData.data[i+1]=0;
+		imgData.data[i+2]=0;
+		imgData.data[i+3]=255;
+	}
+	context_1.putImageData(imgData,10,10);	
+	
+	var canvas_2 = document.getElementById("canvas_2");
+	var context_2 = canvas_2.getContext("2d");
+	context_2.fillStyle="green";
+	context_2.fillRect(10,10,50,50);
+	
+	function copy(){
+		var imgData = context_2.getImageData(10,10,50,50);//x y width height
+		/*
+			context.putImageData(imgData,x,y,dirtyX,dirtyY,dirtyWidth,dirtyHeight);
+			imgData	规定要放回画布的 ImageData 对象。
+			x	ImageData 对象左上角的 x 坐标，以像素计。
+			y	ImageData 对象左上角的 y 坐标，以像素计。
+			dirtyX	可选。水平值（x），以像素计，在画布上放置图像的位置。
+			dirtyY	可选。水平值（y），以像素计，在画布上放置图像的位置。
+			dirtyWidth	可选。在画布上绘制图像所使用的宽度。
+			dirtyHeight	可选。在画布上绘制图像所使用的高度。
+		*/
+		context_2.putImageData(imgData,10,70);
+	}
+	
+  </script>
+</html>

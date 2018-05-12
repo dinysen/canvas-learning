@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>transition</title>
+    <title>text</title>
 	
     <meta name="keywords" content="keyword1,keyword2,keyword3">
     <meta name="description" content="this is my page">
@@ -13,64 +13,88 @@
   
   <body>
     <canvas width="250px" height="250px" id="canvas_1" ></canvas>
-    <canvas id="canvas_2" ></canvas>
-    <canvas id="canvas_3" ></canvas>
-    <canvas id="canvas_4" ></canvas>
-    <canvas id="canvas_5" ></canvas>
+    <canvas  id="canvas_2" ></canvas>
+    <canvas  id="canvas_3" ></canvas>
+    <canvas  id="canvas_4" ></canvas>
     
   </body>
   <script>
   	var canvas_1 = document.getElementById("canvas_1");
-  	var context_1 = canvas_1.getContext("2d");
-  	context_1.strokeStyle = "black";
-  	context_1.strokeRect(20,20,100,100);
-	context_1.scale(2,2); //x倍数 y倍数 直接放大的画布 
-	context_1.strokeRect(20,20,100,100);	
-  	
-  	var canvas_2 = document.getElementById("canvas_2");
-  	var context_2 = canvas_2.getContext("2d");
-  	context_2.rotate(20*Math.PI/180);//这里是弧度数
-	context_2.fillRect(50,20,100,50);
+	var context_1 = canvas_1.getContext("2d");
+	//有很多属性，详情查询 http://www.w3school.com.cn/tags/canvas_font.asp
+	context_1.font="40px Arial";
+	context_1.fillText("Hello World",10,50);
+	
+	var canvas_2 = document.getElementById("canvas_2");
+	var context_2 = canvas_2.getContext("2d");
+	
+	// 在位置 150 创建蓝线
+	context_2.strokeStyle="blue";
+	context_2.moveTo(150,20);
+	context_2.lineTo(150,170);
+	context_2.stroke();
+	
+	context_2.font="15px Arial";
+	
+	// 显示不同的 textAlign 值
+	context_2.textAlign="start";
+	context_2.fillText("textAlign=start",150,60);
+	context_2.textAlign="end";
+	context_2.fillText("textAlign=end",150,80);
+	context_2.textAlign="left";
+	context_2.fillText("textAlign=left",150,100);
+	context_2.textAlign="center";
+	context_2.fillText("textAlign=center",150,120);
+	context_2.textAlign="right";
+	context_2.fillText("textAlign=right",150,140);
 	
 	var canvas_3 = document.getElementById("canvas_3");
 	var context_3 = canvas_3.getContext("2d");
-	context_3.fillRect(10,10,100,50);
-	context_3.translate(70,70);//更改坐标原点的位置
-	context_3.fillRect(10,10,100,50);
+	
+	//在位置 y=100 绘制蓝色线条
+	context_3.strokeStyle="blue";
+	context_3.moveTo(5,100);
+	context_3.lineTo(395,100);
+	context_3.stroke();
+	
+	context_3.font="20px Arial"
+	
+	// 创建渐变
+	var gradient = context_3.createLinearGradient(0,0,300,0);
+	gradient.addColorStop("0","magenta");
+	gradient.addColorStop("0.5","blue");
+	gradient.addColorStop("1.0","red");
+	// 用渐变填色
+	context_3.fillStyle=gradient;
+	context_3.fillText("w3school.com.cn",10,90);//text x y maxwidth(可选) 
+	
+	//在 y=200 以不同的 textBaseline 值放置每个单词
+	context_3.textBaseline="top";
+	context_3.fillText("Top",5,100);
+	context_3.textBaseline="bottom";
+	context_3.fillText("Bottom",50,100);
+	context_3.textBaseline="middle";
+	context_3.fillText("Middle",120,100);
+	context_3.textBaseline="alphabetic";
+	context_3.fillText("Alphabetic",190,100);
+	context_3.textBaseline="hanging";
+	context_3.fillText("Hanging",290,100);
 	
 	var canvas_4 = document.getElementById("canvas_4");
 	var context_4 = canvas_4.getContext("2d");
 	
-	context_4.fillStyle="yellow";
-	context_4.fillRect(0,0,250,100)
+	context_4.font="20px Georgia";
+	context_4.strokeText("Hello World!",10,50);
 	
-	/*
-		a(水平缩放绘图) c(垂直倾斜绘图) e(水平移动绘图)
-		b(水平倾斜绘图) d(垂直缩放绘图) f(垂直移动绘图)
-		0 0 1
-	*/
-	context_4.transform(1,0.5,-0.5,1,30,10);//可以更换转换矩阵 每次都在原来的基础上变换
-	context_4.fillStyle="red";
-	context_4.fillRect(0,0,250,100);
-	
-	context_4.transform(1,0.5,-0.5,1,30,10);
-	context_4.fillStyle="blue";
-	context_4.fillRect(0,0,250,100);
-	
-	var canvas_5 = document.getElementById("canvas_5");
-	var context_5 = canvas_5.getContext("2d");
-	
-	context_5.fillStyle="yellow";
-	context_5.fillRect(0,0,250,100)
-	
-	//此处红色不会显示，因为被蓝色的覆盖
-	context_5.setTransform(1,0.5,-0.5,1,30,10);//更换转换矩阵 每次都在单位矩阵的基础上变换
-	context_5.fillStyle="red";
-	context_5.fillRect(0,0,250,100);
-	
-	context_5.setTransform(1,0.5,-0.5,1,30,10);
-	context_5.fillStyle="blue";
-	context_5.fillRect(0,0,250,100);
+	context_4.font="30px Verdana";
+	// 创建渐变
+	var gradient=context_4.createLinearGradient(0,0,c.width,0);
+	gradient.addColorStop("0","magenta");
+	gradient.addColorStop("0.5","blue");
+	gradient.addColorStop("1.0","red");
+	// 用渐变填色
+	context_4.strokeStyle=gradient;
+	context_4.strokeText("w3school.com.cn",10,90);//绘制文本 无填充
   	
   </script>
 </html>
