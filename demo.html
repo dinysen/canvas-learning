@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>demo</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=GBK">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<style>
+		*{
+			position :relative;
+			margin : 0;
+			padding : 0;
+		}
+		html,body{
+			width : 100%;
+			height : 100%;
+		}
+		.root{
+			padding-left : 200px;
+			width : 100%;
+			height : 100%;
+			box-sizing :border-box;
+		}
+		.opcontainer{
+			position : absolute;
+			top : 0;
+			left : 0;
+			width : 200px;
+			min-height : 50px;
+		}
+		.btn{
+		    float: left;
+		    margin-top: 10px;
+		    margin-left: 10px;
+		    width: 80px;
+		    height: 30px;
+		}
+		.canvas_container{
+			position : absolute;
+			left : 200px;
+			right : 0;
+			height : 100%;
+		}
+		.mark{
+		    position:absolute;
+		    height:50px;
+		    width:50px;
+		    left:50px;
+		    top:50px;
+		    border:1px solid white;
+		    cursor:move;
+		    z-index : 999;
+		}
+	</style>
+  </head>
+  
+  <body>
+  	<div class="root" >
+  		<div class="opcontainer" >
+  			<button class="btn" onclick="bigger()" >放大</button>
+  			<button class="btn" onclick="smaller()" >缩小</button>
+  			<button class="btn" onclick="clip()" >裁剪</button>
+  			<button class="btn" onclick="contrast()" >对比度增强</button>
+  			<button class="btn" onclick="brightness()" >亮度增强</button>
+  			<button class="btn" onclick="save()" >保存</button>
+  		</div>
+  		<img id="img" src="http://localhost:8080/service/image/receipt.jpg" style="display:none;" />
+  		<div class="canvas_container" >
+  			<div id="mark" class="mark" ></div>
+  			<canvas id="canvas" width="500" height="400" style="border:1px solid #ccc;" ></canvas>
+  			<p>裁剪后图像</p>
+  			<canvas id="canvas2" width="500" height="400" style="border:1px solid #ccc;" ></canvas>
+  		</div>
+  	</div>
+  </body>
+  <script>
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var img = document.getElementById("img");
+	var width,height;
+	context.save();//保存为初始状态，如果有restore，就将标准恢复到这个状态
+	context.clearRect(0,0,500,500);
+	img.onload = function(){
+		var ratio = img.height / img.width;
+		width = img.width * 0.3;
+		height = width * ratio;
+		context.drawImage(img,0,0,width,height);
+	}
+	
+	function save(){
+		var dataUrl = canvas.toDataURL('image/jpeg');
+		alert(dataUrl);
+	}
+	
+	function brightness(amount){
+		amount = amount || 1.05;
+		var imageData = context.getImageData(0,0,width,height);
+		
+		//先计算rgb均值
+		var rSum=0,gSum=0,bSum=0;
+		var total = (imageData.width * imageData.height);
+		for(var i=0;i<imageData.width;i++){
+			for(var j=0;j<imageData.height;j++){
+				var index=(j*4)*imageData.width+(i*4);
+				var r=imageData.data[index];
+        		var g=imageData.data[index+1];
+       	 		var b=imageData.data[index+2];
+       	 		rSum += r;
+       	 		gSum += g;
+       	 		bSum += b;
+			}
+		}
+		
+		var rAvg = rSum / total;
+		var gAvg = gSum / total;
+		var bAvg = bSum / total;
+		
+		for(var i=0;i<imageData.width;i++){
+			for(var j=0;j<imageData.height;j++){
+				var index=(j*4)*imageData.width+(i*4);
+				//系数在[0,2]之间
+				var r = imageData.data[index] + rAvg*amount;
+        		var g = imageData.data[index+1] + gAvg*amount ;
+       	 		var b = imageData.data[index+2] + bAvg*amount ;
+       	 		
+       	 		if(r>255) r=255;
+		    	if(r<0) r=0;
+		    	if(g>255) g=255;
+		    	if(g<0) g=0;
+		    	if(b>255) b=255;
+		    	if(b<0) b=0;
+       	 		
+       	 		imageData.data[index] = r;
+       	 		imageData.data[index+1] = g;
+       	 		imageData.data[index+2] = b;
+       	 		
+			}
+		}
+        
+		context.putImageData(imageData,0,0,0,0,width,height);
+	}
+	
+	function contrast(contrast,brightness){
+		contrast = contrast || 1.5;
+		brightness = brightness || 1;
+		var imageData = context.getImageData(0,0,width,height);
+		
+		//先计算rgb均值
+		var rSum=0,gSum=0,bSum=0;
+		var total = (imageData.width * imageData.height);
+		for(var i=0;i<imageData.width;i++){
+			for(var j=0;j<imageData.height;j++){
+				var index=(j*4)*imageData.width+(i*4);
+				var r=imageData.data[index];
+        		var g=imageData.data[index+1];
+       	 		var b=imageData.data[index+2];
+       	 		rSum += r;
+       	 		gSum += g;
+       	 		bSum += b;
+			}
+		}
+		
+		var rAvg = rSum / total;
+		var gAvg = gSum / total;
+		var bAvg = bSum / total;
+		
+		//每个像素点要去掉平均数
+		for(var i=0;i<imageData.width;i++){
+			for(var j=0;j<imageData.height;j++){
+				var index=(j*4)*imageData.width+(i*4);
+				
+				var r = imageData.data[index] - rAvg;
+        		var g = imageData.data[index+1] - gAvg ;
+       	 		var b = imageData.data[index+2] - bAvg ;
+       	 		//乘以个系数  对比度系数的取值范围在[0,4]之间
+       	 		r *= contrast;
+       	 		g *= contrast;
+       	 		b *= contrast;
+       	 		
+       	 		r += rAvg*brightness;
+        		g += gAvg*brightness ;
+       	 		b += bAvg*brightness ;
+       	 		
+       	 		if(r>255) r=255;
+		    	if(r<0) r=0;
+		    	if(g>255) g=255;
+		    	if(g<0) g=0;
+		    	if(b>255) b=255;
+		    	if(b<0) b=0;
+       	 		
+       	 		imageData.data[index] = r;
+       	 		imageData.data[index+1] = g;
+       	 		imageData.data[index+2] = b;
+       	 		
+			}
+		}
+        
+		context.putImageData(imageData,0,0,0,0,width,height);
+	}
+	
+	function clip(){
+		var oMark = document.getElementById("mark")
+	    var canvas_2 = document.getElementById("canvas2")
+	    var context_2 = canvas_2.getContext("2d")
+	    var srcX = oMark.offsetLeft-canvas.getBoundingClientRect().left;
+	    srcX = srcX < 0 ? 0 : srcX;
+	    var srcY = oMark.offsetTop-canvas.getBoundingClientRect().top;
+	    srcY = srcY < 0 ? 0 : srcY;
+	    var sWidth = oMark.offsetWidth;
+	    var sHeight = oMark.offsetHeight;
+	
+        var dataImg = context.getImageData(srcX,srcY,sWidth,sHeight);
+        context_2.putImageData(dataImg,0,0,0,0,canvas_2.width,canvas_2.height)
+        var img2 = canvas_2.toDataURL("image/png");
+
+        var new_image = new Image();
+        new_image.src = img2;
+        new_image.onload  = function(){
+            context_2.drawImage(new_image,0,0,canvas_2.width,canvas_2.height);
+        }
+	}
+	
+	function smaller(){
+		context.scale(0.5,0.5);
+		context.clearRect(0,0,500,500);
+		context.drawImage(img,0,0,200,200);
+	}
+	
+	function bigger(){
+		context.scale(1.5,1.5);
+		context.clearRect(0,0,500,500);
+		context.drawImage(img,0,0,200,200);
+	}
+	
+  </script>
+</html>
