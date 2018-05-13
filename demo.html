@@ -64,7 +64,6 @@
   			<button class="btn" onclick="smaller()" >缩小</button>
   			<button class="btn" onclick="clip()" >裁剪</button>
   			<button class="btn" onclick="contrast()" >对比度增强</button>
-  			<button class="btn" onclick="brightness()" >亮度增强</button>
   			<button class="btn" onclick="save()" >保存</button>
   		</div>
   		<img id="img" src="http://localhost:8080/service/image/receipt.jpg" style="display:none;" />
@@ -93,54 +92,6 @@
 	function save(){
 		var dataUrl = canvas.toDataURL('image/jpeg');
 		alert(dataUrl);
-	}
-	
-	function brightness(amount){
-		amount = amount || 1.05;
-		var imageData = context.getImageData(0,0,width,height);
-		
-		//先计算rgb均值
-		var rSum=0,gSum=0,bSum=0;
-		var total = (imageData.width * imageData.height);
-		for(var i=0;i<imageData.width;i++){
-			for(var j=0;j<imageData.height;j++){
-				var index=(j*4)*imageData.width+(i*4);
-				var r=imageData.data[index];
-        		var g=imageData.data[index+1];
-       	 		var b=imageData.data[index+2];
-       	 		rSum += r;
-       	 		gSum += g;
-       	 		bSum += b;
-			}
-		}
-		
-		var rAvg = rSum / total;
-		var gAvg = gSum / total;
-		var bAvg = bSum / total;
-		
-		for(var i=0;i<imageData.width;i++){
-			for(var j=0;j<imageData.height;j++){
-				var index=(j*4)*imageData.width+(i*4);
-				//系数在[0,2]之间
-				var r = imageData.data[index] + rAvg*amount;
-        		var g = imageData.data[index+1] + gAvg*amount ;
-       	 		var b = imageData.data[index+2] + bAvg*amount ;
-       	 		
-       	 		if(r>255) r=255;
-		    	if(r<0) r=0;
-		    	if(g>255) g=255;
-		    	if(g<0) g=0;
-		    	if(b>255) b=255;
-		    	if(b<0) b=0;
-       	 		
-       	 		imageData.data[index] = r;
-       	 		imageData.data[index+1] = g;
-       	 		imageData.data[index+2] = b;
-       	 		
-			}
-		}
-        
-		context.putImageData(imageData,0,0,0,0,width,height);
 	}
 	
 	function contrast(contrast,brightness){
@@ -180,6 +131,7 @@
        	 		g *= contrast;
        	 		b *= contrast;
        	 		
+       	 		//这里是亮度设置
        	 		r += rAvg*brightness;
         		g += gAvg*brightness ;
        	 		b += bAvg*brightness ;
