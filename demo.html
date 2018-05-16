@@ -64,7 +64,7 @@
   			<button class="btn" onclick="smaller()" >缩小</button>
   			<button class="btn" onclick="clip()" >裁剪</button>
   			<button class="btn" onclick="contrast()" >对比度增强</button>
-  			<button class="btn" onclick="save()" >保存</button>
+  			<button class="btn" onclick="save()" >保存并上传</button>
   		</div>
   		<img id="img" src="http://localhost:8080/service/image/receipt.jpg" style="display:none;" />
   		<div class="canvas_container" >
@@ -75,6 +75,7 @@
   		</div>
   	</div>
   </body>
+  <script src="/service/js/jquery.min.js"></script>
   <script>
 	var canvas = document.getElementById("canvas");
 	var context = canvas.getContext("2d");
